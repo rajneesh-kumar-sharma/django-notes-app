@@ -5,7 +5,7 @@ pipeline{
     
     stages{
         
-        stage("Hello"){
+        stage("Hello friends"){
             steps{
                 script{
                     hello()
