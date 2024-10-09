@@ -1,44 +1,47 @@
-@Library("Shared") _
-pipeline{
-    
-    agent { label "vinod"}
-    
+@Library("shared") _
+pipeline {
+    agent{label "raj"}
     stages{
-        
-        stage("Hello friends"){
+        stage ("Hello"){
             steps{
                 script{
                     hello()
                 }
             }
         }
-        stage("Code"){
+        stage ("test"){
+            steps{
+                echo "hello Rajneesh"
+            }
+        }
+        stage ("code"){
+            steps{
+                script{
+                   clone("https://github.com/rajneesh-kumar-sharma/django-notes-app.git","main")
+               }
+            }
+        }
+        stage ("Build"){
             steps{
                script{
-                clone("https://github.com/LondheShubham153/django-notes-app.git","main")
+                   docker_build("notes_app","latest","coolrajnish")
                }
-                
+               }
             }
-        }
-        stage("Build"){
+            
+        stage ("Push to Docker Hub"){
             steps{
                 script{
-                docker_build("notes-app","latest","trainwithshubham")
-                }
+                   docker_push("notes_app","latest","coolrajnish")
+               }
             }
         }
-        stage("Push to DockerHub"){
+        stage ("Deploy"){
             steps{
-                script{
-                    docker_push("notes-app","latest","trainwithshubham")
-                }
+                sh "docker compose up -d"
             }
         }
-        stage("Deploy"){
-            steps{
-                echo "This is deploying the code"
-                sh "docker compose down && docker compose up -d"
-            }
-        }
+        
     }
 }
+
